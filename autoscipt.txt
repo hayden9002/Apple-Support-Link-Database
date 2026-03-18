@@ -56,6 +56,6 @@ function expandList(str) {
   const ids = expandList(raw);
   const output = await fetchIds(base, ids);
   console.log(output);
-  console.log(Object.values(output).filter(j => !j.error).map(entry => `${entry.id}\t${entry.title.replace(" - Apple Support", "")}\t`).join("\n"));
+  console.log(Object.values(output).filter(j => !j.error).map(entry => `${entry.id}\t${entry.title.replace(" - Apple Support", "").replace(/\t*$/g, "")}\\`).join("\n"));
   console.log(`Skipped ${Object.values(output).filter(j => !j || j.error).length} entries because they were not sigma`);
 })();
