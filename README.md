@@ -5,17 +5,17 @@ Run the script on anyapple support page https://support.apple.com/en-us/118202 t
 
 0-100100 Don't exist
 
-100100	Apple security releases	
-100129	Apple Service and Repair for Apple Watch	
-100144	Official Apple Support	
-100149	Apple Service and Repair for HomePod	
-100158	Apple Service and Repair for Apple TV	
-100159	Express Replacement Service	
-100161	Apple Service and Repair for Beats	
-100162	Express Replacement Service	
-100163	Express Replacement Service	
-100165	Apple Service and Repair for iPhone	
-100167	Apple Service and Repair for iPhone Screens	
+100100	Apple security releases\
+100129	Apple Service and Repair for Apple Watch	\
+100144	Official Apple Support	\
+100149	Apple Service and Repair for HomePod	\
+100158	Apple Service and Repair for Apple TV	\
+100159	Express Replacement Service	\
+100161	Apple Service and Repair for Beats	\
+100162	Express Replacement Service	\
+100163	Express Replacement Service	\
+100165	Apple Service and Repair for iPhone	\
+100167	Apple Service and Repair for iPhone Screens	\
 100168	Express Replacement Service	
 100169	Express Replacement Service	
 100171	Apple Service and Repair for iPhone Battery	
