@@ -1,0 +1,39 @@
+async function fetchIds(baseUrl, ids) {
+  const results = {};
+  await Promise.all(ids.map(async id => {
+    const url = `${baseUrl.replace(/\/$/, "")}/${encodeURIComponent(id)}`;
+    try {
+      const res = await fetch(url, { credentials: "omit" });
+      if (!res.ok) {
+        results[id] = { error: `HTTP ${res.status}` };
+        return;
+      }
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const titleEl = doc.querySelector("title");
+      const canonicalEl = doc.querySelector("link[rel='canonical']");
+      let lastSegment = null;
+      if (canonicalEl) {
+        const href = canonicalEl.href || canonicalEl.getAttribute("href") || "";
+        const segments = href.replace(/\/+$/, "").split("/");
+        const last = segments[segments.length - 1] || "";
+        lastSegment = /^\d+$/.test(last) ? last : null;
+      }
+      results[id] = {
+        title: titleEl ? titleEl.textContent.trim() : null,
+        id: lastSegment
+      };
+    } catch (err) {
+      results[id] = { error: err.message };
+    }
+  }));
+  return results;
+}
+
+(async () => {
+  const base = "https://support.apple.com/en-us";
+  const ids = prompt("Enter support IDs separated by commas, bruh:").split(/\s*,\s*/g);
+  const output = await fetchIds(base, ids);
+  
+  console.log(Object.values(output).map(entry => `${entry.id}\t${entry.title}`).join("\n"))
+})();
