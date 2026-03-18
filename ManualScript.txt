@@ -3,9 +3,13 @@ async function fetchIds(baseUrl, ids) {
   await Promise.all(ids.map(async id => {
     const url = `${baseUrl.replace(/\/$/, "")}/${encodeURIComponent(id)}`;
     try {
-      const res = await fetch(url, { credentials: "omit" });
+      const res = await fetch(url, {
+        credentials: "omit"
+      });
       if (!res.ok) {
-        results[id] = { error: `HTTP ${res.status}` };
+        results[id] = {
+          error: `HTTP ${res.status}`
+        };
         return;
       }
       const html = await res.text();
@@ -24,16 +28,40 @@ async function fetchIds(baseUrl, ids) {
         id: lastSegment
       };
     } catch (err) {
-      results[id] = { error: err.message };
+      results[id] = {
+        error: err.message
+      };
     }
   }));
   return results;
 }
 
+
+function expandList(str) {
+  return str
+    .split(/\s*,\s*/g)
+    .flatMap(token => {
+      if (!token) return [];
+      const range = token.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (range) {
+        const a = Number(range[1]),
+          b = Number(range[2]);
+        if (a <= b) return Array.from({
+          length: b - a + 1
+        }, (_, i) => String(a + i));
+        return Array.from({
+          length: a - b + 1
+        }, (_, i) => String(a - i));
+      }
+      return [token];
+    })
+}
+
 (async () => {
   const base = "https://support.apple.com/en-us";
-  const ids = prompt("Enter support IDs separated by commas, bruh:").split(/\s*,\s*/g);
+  const raw = prompt("Enter support IDs separated by commas, bruh\n also fam ranges allowed (e.g. 3, 5-8, 67, 420):");
+
+  const ids = expandList(raw);
   const output = await fetchIds(base, ids);
-  
-  console.log(Object.values(output).map(entry => `${entry.id}\t${entry.title}`).join("\n"))
+  console.log(Object.values(output).map(entry => `${entry.id}\t${entry.title.replace(" - Apple Support", "")}\t`).join("\n"))
 })();
